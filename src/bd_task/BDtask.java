@@ -12,15 +12,15 @@ import java.util.stream.IntStream;
 
 public class BDtask {
 
-    private static int getResultSetRowCount(ResultSet resultSet) {
+    private static int getResultSetRowCount(ResultSet rs) {
         int size = 0;
         try {
-            resultSet.last();
-            size = resultSet.getRow();
-            resultSet.beforeFirst();
+            rs.last();
+            size = rs.getRow();
+            rs.beforeFirst();
         }
-        catch(SQLException ex) {
-            return 0;
+        catch(SQLException e) {
+            e.printStackTrace();
         }
         return size;
     }
@@ -38,31 +38,31 @@ public class BDtask {
 
             System.out.println(rowCount+"");
 
-            IntStream a = IntStream.rangeClosed(0, rowCount);
+            IntStream a = IntStream.rangeClosed(1, rowCount);
 
-            a.forEach(el->{
-                System.out.println("stream"+el);
-            });
+            a.forEach(el1->{
+                try {
+                    rs.next();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
 
-            for(int i=0; i<rowCount; i++)
-            {
-                rs.next();
-                HashMap addedMap = new HashMap<String, String>();
+                Map addedMap = new HashMap<String, String>();
 
-                fields.forEach(el->{
+                fields.forEach(el2->{
                     try {
-                        addedMap.put(el, rs.getString(el));
+                        addedMap.put(el2, rs.getString(el2));
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
                 });
 
                 retData.add(addedMap);
-            }
+
+            });
         } catch (SQLException e)
         {
             e.printStackTrace();
-            System.exit(-1);
         }
 
         return retData;
@@ -73,16 +73,24 @@ public class BDtask {
         List<Map<String, String>> data1 = getData(bd1, table1, fields);
         List<Map<String, String>> data2 = getData(bd2, table2, fields);
 
-        if(data1.size() != data2.size()) return false;
+        if(data1.size() != data2.size())
+        {
+            return false;
+        }
 
-        boolean isEqual = true;
 
-        data1.forEach(el -> {
-            if (!data2.contains(el)){
-                System.out.println("dont eq");
-            }
-        });
+        if(data2.size() == 0) {
+            return false;
+        }
+        else {
+            data1.forEach(el -> {
+                if (!data2.contains(el)) {
+                    data2.clear();
+                }
+            });
 
-        return true;
+            System.out.println(data2.size() + "");
+            return data2.size() != 0;
+        }
     }
 }

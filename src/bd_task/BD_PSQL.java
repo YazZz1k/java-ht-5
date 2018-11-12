@@ -15,6 +15,18 @@ public class BD_PSQL {
         this.URL = URL;
     }
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public void setURL(String URL) {
+        this.URL = URL;
+    }
+
     public Connection getConnection(){
         Connection conn = null;
 
@@ -25,7 +37,7 @@ public class BD_PSQL {
 
             if (conn == null) {
                 System.out.println("Don't connect to "+ URL);
-                System.exit(0);
+                System.exit(-1);
             }
         } catch (ClassNotFoundException|SQLException e) {
            e.printStackTrace();
