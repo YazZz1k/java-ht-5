@@ -36,8 +36,6 @@ public class BDtask {
 
             int rowCount = getResultSetRowCount(rs);
 
-            System.out.println(rowCount+"");
-
             IntStream a = IntStream.rangeClosed(1, rowCount);
 
             a.forEach(el1->{
@@ -89,7 +87,6 @@ public class BDtask {
                 }
             });
 
-            System.out.println(data2.size() + "");
             return data2.size() != 0;
         }
     }
